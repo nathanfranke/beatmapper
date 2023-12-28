@@ -179,6 +179,7 @@ const PlacementGrid = ({
               setHoveredCell={setHoveredCell}
               clickPlacementGrid={clickPlacementGrid}
               createNewObstacle={createNewObstacle}
+              setBlockByDragging={setBlockByDragging}
             />
           );
         })

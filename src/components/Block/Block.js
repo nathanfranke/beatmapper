@@ -116,6 +116,11 @@ const Block = React.memo(
     };
 
     const onPointerDown = ev => {
+      // Do not handle selection when holding CTRL, so users can place many fast notes without selecting.
+      if (ev.ctrlKey) {
+        return;
+      }
+
       ev.stopPropagation();
 
       // We can rapidly select/deselect/delete notes by clicking, holding,

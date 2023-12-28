@@ -26,6 +26,7 @@ const GridSquare = ({
   setHoveredCell,
   clickPlacementGrid,
   createNewObstacle,
+  setBlockByDragging,
 }) => {
   // Our `rowHeight` is in units compared to the default, so a
   // non-map-extension grid would have a height and width of 1.
@@ -111,12 +112,29 @@ const GridSquare = ({
 
         ev.stopPropagation();
 
-        setMouseDownAt({
-          rowIndex,
-          colIndex,
-          x: ev.pageX,
-          y: ev.pageY,
-        });
+        if (ev.ctrlKey) {
+          // TODO: HACKY, but allows users to place notes on mouse down, not mouse up.
+          // Rest of this block is copied from `onClick`.
+
+          // With mapping extensions enabled, it's possible we need to
+          // convert the rowIndex/colIndex to one appropriate for the
+          // current grid!
+          const effectiveColIndex = convertGridColumn(
+            colIndex,
+            numCols,
+            colWidth
+          );
+          const effectiveRowIndex = convertGridRow(rowIndex, numRows, rowHeight);
+
+          clickPlacementGrid(effectiveRowIndex, effectiveColIndex);
+        } else {
+          setMouseDownAt({
+            rowIndex,
+            colIndex,
+            x: ev.pageX,
+            y: ev.pageY,
+          });
+        }
       }}
       onPointerUp={ev => {
         if (selectedTool === 'obstacle' && ev.button === 0 && mouseDownAt) {
